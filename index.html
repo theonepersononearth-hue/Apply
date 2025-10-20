@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RP Application Portal</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #002244, #0055aa);
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 500px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 30px;
+    border-radius: 20px;
+    margin: 60px auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    animation: fadeIn 0.8s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  input, select, button {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+  }
+
+  button {
+    background-color: #1e90ff;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background-color: #187bcd;
+  }
+
+  h1, h2, h3 {
+    color: #fff;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+</style>
+</head>
+<body>
+
+<div id="page1" class="container">
+  <h1>RP Application Portal</h1>
+  <p>Select what you want to apply for:</p>
+  <select id="applicationType">
+    <option value="">-- Select One --</option>
+    <option value="Passport">Passport</option>
+    <option value="ID">ID</option>
+    <option value="Driver's License">Driver’s License</option>
+  </select>
+
+  <p>Enter your RP character's birthday:</p>
+  <input type="date" id="birthday">
+  <button onclick="goToPage2()">Next</button>
+</div>
+
+<div id="page2" class="container hidden">
+  <h2 id="page2-title"></h2>
+  <p>Which RP game is your character from?</p>
+  <input type="text" id="rpGame" placeholder="e.g., Brookhaven, Military RP, GTA RP">
+  <button onclick="goToPage3()">Next</button>
+  <button onclick="goBackToPage1()">← Back</button>
+</div>
+
+<div id="page3" class="container hidden">
+  <h2>Choose Your Payment Method</h2>
+  <p>(Don’t worry — it’s not real money 😉)</p>
+  <select id="paymentType">
+    <option value="">-- Select Payment Option --</option>
+    <option value="RP Cash">RP Cash</option>
+    <option value="Credits">Credits</option>
+    <option value="Coins">Coins</option>
+    <option value="Tokens">Tokens</option>
+  </select>
+  <button onclick="finishApplication()">Submit</button>
+  <button onclick="goBackToPage2()">← Back</button>
+</div>
+
+<div id="confirmation" class="container hidden">
+  <h2>✅ Application Submitted!</h2>
+  <p id="summary"></p>
+  <button onclick="restart()">Start Over</button>
+</div>
+
+<script>
+let appType = "";
+let birthday = "";
+let rpGame = "";
+let paymentType = "";
+
+function goToPage2() {
+  appType = document.getElementById("applicationType").value;
+  birthday = document.getElementById("birthday").value;
+
+  if (!appType || !birthday) {
+    alert("Please select an application type and enter a birthday!");
+    return;
+  }
+
+  document.getElementById("page1").classList.add("hidden");
+  document.getElementById("page2").classList.remove("hidden");
+  document.getElementById("page2-title").textContent = `${appType} Application`;
+}
+
+function goBackToPage1() {
+  document.getElementById("page2").classList.add("hidden");
+  document.getElementById("page1").classList.remove("hidden");
+}
+
+function goToPage3() {
+  rpGame = document.getElementById("rpGame").value;
+  if (!rpGame) {
+    alert("Please enter which RP game your character is from!");
+    return;
+  }
+
+  document.getElementById("page2").classList.add("hidden");
+  document.getElementById("page3").classList.remove("hidden");
+}
+
+function goBackToPage2() {
+  document.getElementById("page3").classList.add("hidden");
+  document.getElementById("page2").classList.remove("hidden");
+}
+
+function finishApplication() {
+  paymentType = document.getElementById("paymentType").value;
+  if (!paymentType) {
+    alert("Please select a payment method!");
+    return;
+  }
+
+  document.getElementById("page3").classList.add("hidden");
+  document.getElementById("confirmation").classList.remove("hidden");
+
+  document.getElementById("summary").innerHTML = `
+    <strong>Application Type:</strong> ${appType}<br>
+    <strong>Birthday:</strong> ${birthday}<br>
+    <strong>RP Game:</strong> ${rpGame}<br>
+    <strong>Payment Type:</strong> ${paymentType}<br><br>
+    Your ${appType.toLowerCase()} request has been received and will be processed shortly! 🪪
+  `;
+}
+
+function restart() {
+  appType = birthday = rpGame = paymentType = "";
+  document.querySelectorAll('.container').forEach(div => div.classList.add('hidden'));
+  document.getElementById("page1").classList.remove("hidden");
+  document.getElementById("applicationType").value = "";
+  document.getElementById("birthday").value = "";
+  document.getElementById("rpGame").value = "";
+  document.getElementById("paymentType").value = "";
+}
+</script>
+
+</body>
+</html>
